@@ -54,15 +54,7 @@ class BaseBuilder(object):
     @property
     def get_model_class(self):
         """Returns model class"""
-        try:
-            c = ContentType.objects.get(app_label=self.app, model=self.model)
-        except ContentType.DoesNotExist:
-            # try another kind of resolution
-            # fixes a situation where a proxy model is defined in some external app.
-            if django.VERSION >= (1, 7):
-                return apps.get_model(self.app, self.model)
-        else:
-            return c.model_class()
+        return apps.get_model(self.app, self.model)
 
     def _has_crud_attr(self, attr):
         return getattr(self.crud, attr, None)
